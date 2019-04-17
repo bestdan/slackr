@@ -1,4 +1,6 @@
 
+# 1.7.0
+* Removes `slack_tex` due to no-one using it, and reliance on tinytex/latex.
 
 # 1.6.0
 * Adds caching of channels for improve performance. `slackr_setup()` includes `runcensus()` by default to reduce redundant requests. Improved error messages in `slackr_chtrans()`
