@@ -179,7 +179,7 @@ slackr_channel_history <- function(api_token = Sys.getenv("SLACK_API_TOKEN"),
 }
 
 
-
+#' @importFrom assertthat assert_that
 stopIfOkFalse <- function(x){
   result <- jsonlite::fromJSON(httr::content(x, as="text"))
   assert_that(result$ok == TRUE,

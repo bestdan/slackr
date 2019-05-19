@@ -1,8 +1,7 @@
 library(testthat)
 library(yaml)
 library(slackr)
-
-slackr_setup(config_file = system.file(file.path("exdata", "slackr_config.dcf"), package = "slackr"))
+library(assertthat)
 
 test_check("slackr")
 
