@@ -14,7 +14,9 @@
 #' @return character vector - original channel list with \code{#} or
 #'          \code{@@} channels replaced with ID's.
 #' @export
-slackr_chtrans <- function(channels, api_token=Sys.getenv("SLACK_API_TOKEN"), census=getGlobalIfMissing(get("slackr_census"))) {
+slackr_chtrans <- function(channels,
+                           api_token=Sys.getenv("SLACK_API_TOKEN"),
+                           census=getGlobalIfMissing("slackr_census")) {
 
   if(is.null(census)){
     census <- runcensus(api_token)
@@ -71,6 +73,7 @@ slackr_users <- function(api_token=Sys.getenv("SLACK_API_TOKEN")) {
 
   tmp <- httr::POST("https://slack.com/api/users.list", body=list(token=api_token))
   httr::stop_for_status(tmp)
+  okContent(tmp)
   members <- jsonlite::fromJSON(httr::content(tmp, as="text"))$members
   cols <- setdiff(colnames(members), c("profile", "real_name"))
   cbind.data.frame(members[,cols], members$profile, stringsAsFactors=FALSE)
@@ -92,7 +95,7 @@ slackr_channels <- function(api_token=Sys.getenv("SLACK_API_TOKEN")) {
   tmp <- POST("https://slack.com/api/channels.list",
               body=list(token=api_token))
   stop_for_status(tmp)
-  stopIfOkFalse(tmp)
+  okContent(tmp)
   jsonlite::fromJSON(content(tmp, as="text"))$channels
 
 }
@@ -113,7 +116,7 @@ slackr_groups <- function(api_token=Sys.getenv("SLACK_API_TOKEN")) {
 
   tmp <- httr::POST("https://slack.com/api/groups.list", body=list(token=api_token))
   httr::stop_for_status(tmp)
-  stopIfOkFalse(tmp)
+  okContent(tmp)
   jsonlite::fromJSON(content(tmp, as="text"))$groups
 
 }
@@ -137,7 +140,7 @@ slackr_ims <- function(api_token=Sys.getenv("SLACK_API_TOKEN")) {
   # tmp <- httr::GET("https://slack.com/api/users.list", query=list(token=api_token, limit = 2000))
   # The method below is supposedly deprecated
   tmp <- httr::GET("https://slack.com/api/im.list", query=list(token=api_token))
-  stopIfOkFalse(tmp)
+  okContent(tmp)
   ims <- jsonlite::fromJSON(httr::content(tmp, as="text"))$ims
   assert_that(!is.null(ims), msg = "Could not retrieve any IMs")
   users <- slackr_users(api_token)
@@ -178,11 +181,3 @@ slackr_channel_history <- function(api_token = Sys.getenv("SLACK_API_TOKEN"),
   return(out)
 }
 
-
-#' @importFrom assertthat assert_that
-stopIfOkFalse <- function(x){
-  result <- jsonlite::fromJSON(httr::content(x, as="text"))
-  assert_that(result$ok == TRUE,
-              msg = paste0("ok = FALSE reponse. error: ", result$error))
-
-}
