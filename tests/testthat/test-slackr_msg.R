@@ -2,17 +2,6 @@ context("slackr_msg")
 
 api_token <- getAPIToken()
 
-test_that("slackr_msg: failure when not setup yet", {
-  # On github, should be done with Env variable.
-
-  expect_warning(
-    #NB: Bot must be invited to channel by user.
-    slackr::slackr_msg(txt = paste("testing: ", Sys.time()),
-                       channel = "#publicchanneltest"),
-    regexp = "tibble")
-
-})
-
 slackr_setup(api_token = api_token)
 
 test_that("slackr_msg: Post-setup api tokens work", {
