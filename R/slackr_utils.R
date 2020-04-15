@@ -45,7 +45,7 @@ slackr_chtrans <- function(channels,
 
   if(!nrow(chan_xref)>0){
     all_matches <- unique(sapply(channels, agrep, x=chan_list$name))
-    close_matches <- ifelse(length(all_matches)>0,
+    close_matches <- ifelse(class(all_matches) != "list" && length(all_matches) > 0,
                             paste0(chan_list[all_matches, "full_name"], collapse = ", "),
                             "None.")
 
