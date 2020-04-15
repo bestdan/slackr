@@ -30,11 +30,10 @@ test_that("slackr_msg: Post-setup api tokens work", {
                             username = "TestBot",
                             channel = "@dp.egan"))
   Sys.sleep(1)
-  expect_error(
+  expect_silent(
     slackr_upload(filename = file.path(system.file(package = "slackr"), "exdata", "lorax.jpg"),
                              initial_comment = "Testing",
-                             channel = "@dp.egan"),
-               regexp = "not found")
+                             channel = "@dp.egan"))
   Sys.sleep(1)
   expect_error(slackr_upload(filename = file.path(system.file(package = "slackr"), "exdata", "not_real_file.png"),
                              initial_comment = "Testing",

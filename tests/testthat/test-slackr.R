@@ -1,10 +1,4 @@
-if(Sys.getenv("SLACK_API_TOKEN") == ""){
-  api_token <- yaml::read_yaml(file.path("inst", "exdata", "slackr_creds.yml"))$slackr$api_token
-  Sys.setenv("SLACK_API_TOKEN" = api_token)
-} else {
-  api_token <- Sys.getenv("SLACK_API_TOKEN")
-}
-#NB: relies on Sys.getenv("SLACK_API_TOKEN")
+api_token <- getAPIToken()
 
 test_that("slackr_bot: webhook fails/works appropriately", {
 
@@ -12,7 +6,7 @@ test_that("slackr_bot: webhook fails/works appropriately", {
                             channel = "#publichanneltest",
                             incoming_webhook_url = "BAD HOOK"
                             ),
-                 regexp = "Couldn't resolve host 'BAD HOOK'")
+                 regexp = "Could not resolve host: BAD HOOK")
   Sys.sleep(1)
   expect_silent(slackr_bot(txt = "testing 1,2,3",
                             channel = "#publicchanneltest",
