@@ -7,7 +7,7 @@ test_that("slackr_bot: webhook fails/works appropriately", {
                             channel = "#publichanneltest",
                             incoming_webhook_url = "BAD HOOK"
                             ),
-                 regexp = "Could not resolve host: BAD HOOK")
+                 regexp = "resolve host")
   Sys.sleep(1)
 
   expect_silent(slackr_bot(txt = "testing 1,2,3",
